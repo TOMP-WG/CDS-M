@@ -1,0 +1,504 @@
+openapi: 3.0.0
+info:
+  title: City Data Specification
+  description: This document describes as well the city part of the API as the Transport Operator (or MaaS Provider) part.
+  version: "0.1"
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /meta-data/:
+    parameters:
+      - $ref: '#/components/parameters/apiVersion'
+    get:
+      description: This is the meta data used that must be used to construct the data that has to be delivered at the other endpoint. The TOs can get this information before constructing the information they have to supply.
+      tags:
+        - City
+      responses:
+        '200':
+          description: The bookings matching the query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/meta-data'
+
+  /trip-data/:
+    parameters:
+      - $ref: '#/components/parameters/apiVersion'
+    post:
+      description: The TO/MP should deliver data on a frequent base. This endpoint must be used.
+      tags:
+        - Transport Operator / MaaS Provider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/data'
+      responses:
+        '200':
+          description: The bookings matching the query
+
+components:
+  schemas: 
+    meta-data:
+      type: array
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/feature'
+          - $ref: '#/components/schemas/dimensionDescription'
+          - $ref: '#/components/schemas/valuesDescription'
+
+    data:
+      properties:
+        type: 
+          $ref: '#/components/schemas/featureCollection'
+
+    featureCollection:
+      type: object
+      description: GeoJSon feature collection. There should be one description feature, one feature with geometry per area to report, one dimensionfeature per dimension (so at least 8 city, origin, destination, mode, year, month, day, hour, day_of_week, week)
+      required:
+       - type
+       - features
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.3
+      properties:
+        type:
+          type: string
+          enum:
+          - FeatureCollection
+        features:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/description'
+              - $ref: '#/components/schemas/feature'
+              - $ref: '#/components/schemas/dimensionDescription'
+              - $ref: '#/components/schemas/originDestinationData'
+
+    feature:
+      type: object
+      description: GeoJSon feature
+      required:
+       - type
+       - id
+       - geometry
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.2
+      properties:
+        type:
+          type: string
+          enum:
+            - Feature
+        id:
+          type: integer
+        geometry:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/point'
+              - $ref: '#/components/schemas/lineString'
+              - $ref: '#/components/schemas/polygon'
+              - $ref: '#/components/schemas/multiPoint'
+              - $ref: '#/components/schemas/multiPolygon'
+              - $ref: '#/components/schemas/multilineString'
+        properties:
+          type: object
+    
+    description:
+      type: object
+      description: the discriptor entry for this dataset. Type should be 'Dataset'
+      properties:
+        type:
+          type: string
+          enum:
+            - Feature
+        geometry:
+          description: should be null
+          example: null
+        properties:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: [Dataset]
+            name:
+              description: name for this dataset
+              type: string
+            description:
+              description: short description of the dataset
+              type: string
+
+    dimensionDescription:
+      type: object
+      description: the discriptor entry for this dataset. Type should be 'Dimension'.
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+          enum:
+            - Feature
+        geometry:
+          description: should be null
+          example: null
+        properties:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: [Dimension]
+            name:
+              $ref: '#/components/schemas/dimensionClasses'
+            description:
+              description: short description of the dimension
+              type: string
+            dimensionElements: 
+              type: array
+              items:
+                anyOf:
+                  - $ref: '#/components/schemas/cityDimension'
+                  - $ref: '#/components/schemas/odDimension'
+                  - $ref: '#/components/schemas/modeDimension'
+                  - $ref: '#/components/schemas/yearDimension'
+                  - $ref: '#/components/schemas/monthDimension'
+                  - $ref: '#/components/schemas/dayDimension'
+                  - $ref: '#/components/schemas/hourDimension'
+                  - $ref: '#/components/schemas/dayOfWeekDimension'
+                  - $ref: '#/components/schemas/weekDimension'
+
+    valuesDescription:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - Feature
+        geometry:
+          description: should be null
+          example: null
+        properties:
+          $ref: '#/components/schemas/allValues'
+
+    allValues:
+      type: object
+      properties:
+        measumements:      
+          type: array
+          items:
+            type: string
+            enum: [total_movements,unique_users,total_km,total_duration_minutes,total_co2,total_pm10,total_nox,total_number_of_stops,total_non_moving_assets,total_parking_time,total_charging_minutes,total_out_of_geofence]
+          example:
+            - total_movements
+            - unique_users
+            - total_km
+            - total_duration_minutes
+            - total_co2
+            - total_pm10
+            - total_nox
+            - total_number_of_stops
+            - total_non_moving_assets
+            - total_parking_time
+            - total_charging_minutes
+            - total_out_of_geofence      
+
+    dimensionClasses:
+      type: string
+      description: all available dimensions. The dimensions should be in every originDestinationData. To report data from a specific area (e.g. number of parked assets), you should provide -1 in the destination field.
+      enum: 
+        - city
+        - origin
+        - destination
+        - mode
+        - year
+        - month
+        - day
+        - week
+        - day_of_week
+        - hour
+        
+    cityDimension:
+      type: string
+      description: The available cities ["Amsterdam", "Antwerp"]
+      enum: 
+        - Amsterdam
+
+    odDimension:
+      type: number
+      description: the available id's of the area's in the real features
+      example: 1
+
+    yearDimension:
+      type: number
+      description: The allowed years
+      minimum: 2020
+      maximum: 2999
+      example: 2020
+
+    modeDimension:
+      type: string
+      description: The allowed modalities. to be completed.
+      enum: 
+        - bike
+        - scooter
+        - shared-car
+
+    monthDimension:
+      type: number
+      description: the month index, starting with January = 1
+      minimum: 1
+      maximum: 12
+      example: 3
+
+    dayDimension:
+      type: number
+      description: the day index in the month.
+      minimum: 1
+      maximum: 31
+      example: 9
+
+    dayOfWeekDimension:
+      type: number
+      description: the day of week index. Sunday = 0, Monday = 1 etc
+      minimum: 0
+      maximum: 6
+      example: 1
+
+    weekDimension:
+      type: number
+      description: the week in the year index (https://en.wikipedia.org/wiki/ISO_week_date). 
+      minimum: 1
+      maximum: 53
+      example: 11
+
+    hourDimension:
+      type: number
+      description: the hour of the measurements. All measurements should be grouped by starting hour.
+      minimum: 0
+      maximum: 23
+      example: 8
+      
+    originDestinationData:
+      type: object
+      description: these objects contain all the information. Besides the dimensions described above, all measured data will be in these objects. Can be extended with custom measurements. The dimensions should be in the dimensions described above.
+      additionalProperties: true
+      properties:
+        type:
+          type: string
+          enum:
+            - Feature
+        geometry:
+          description: should be null
+          example: null
+        properties:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: [TabularDatasetRow] 
+            city:
+              type: string
+            origin:
+              type: number
+            destination:
+              type: number
+            mode:
+              type: string
+            year:
+              type: number
+            month:
+              type: number
+            day:
+              type: number
+            hour:
+              type: number
+            day_of_week:
+              type: number
+            week:
+              type: number
+            total_movements:
+              type: number
+              description: total amount of movements from origin to destination
+            unique_users:
+              type: number
+              description: unique amount of travellers booking an asset
+            total_km:
+              type: number
+              description: total amount of km of the trips started in this our
+            total_duration_minutes:
+              type: number 
+              description: total amount of minutes of the trips started in this our
+            total_co2:
+              type: number
+              description: total amount of exhausted CO2 of the trips started in this our
+            total_pm10:
+              type: number
+              description: total amount of created PM10 of the trips started in this our
+            total_nox:
+              type: number
+              description: total amount of exhausted NOx of the trips started in this our
+            total_number_of_stops:
+              type: number
+              description: total amount of stops longer than 1 minute, starting in the specified hour
+            total_out_of_geofence:
+              type: number
+              description: total amount of assets that have been outside the geofence during the trip
+            total_non_moving_assets_0:
+              type: number
+              description: total amount of assets that are not used in this hour. This property is only applicable for areas. Therefore the destination property should be -1.
+            total_non_moving_assets_15:
+              type: number
+              description: total amount of assets that are not used for over 15 minutes in this hour. This property is only applicable for areas. Therefore the destination property should be -1.
+            total_non_moving_assets_30:
+              type: number
+              description: total amount of assets that are not used for over 30 minutes in this hour. This property is only applicable for areas. Therefore the destination property should be -1.
+            total_non_moving_assets_45:
+              type: number
+              description: total amount of assets that are not used for over 45 minutes in this hour. This property is only applicable for areas. Therefore the destination property should be -1.
+            total_parking_time:
+              type: number
+              description: total amount of minutes that assets are not used (included pauzed). This property is only applicable for areas. Therefore the destination property should be -1.
+            total_not_used_time:
+              type: number
+              description: total amount of minutes that assets are not used (excluded pauzed). This property is only applicable for areas. Therefore the destination property should be -1.
+            total_charging_minutes:
+              type: number
+              description: total duration in minutes that assets are being charged. This property is only applicable for areas. Therefore the destination property should be -1.
+
+    geometry:
+      type: object
+      description: GeoJSon geometry
+      required:
+        - type
+      discriminator:
+        propertyName: type
+      externalDocs:
+        url: http://geojson.org/geojson-spec.html#geometry-objects
+      properties:
+        type:
+          type: string
+          description: the geometry type
+  
+    point:
+      type: object
+      description: GeoJSon geometry, WGS84
+      externalDocs:
+        url: http://geojson.org/geojson-spec.html#id2
+      allOf:
+        - $ref: "#/components/schemas/geometry"
+      properties:
+        type:
+          type: string
+          enum:
+          - Point
+        coordinates:
+          type: array
+          minItems: 2
+          maxItems: 2
+          example: [4.320554696391217,51.99267196727367]
+          items:
+            type: number
+  
+    lineString:
+      type: object
+      description: GeoJSon geometry
+      externalDocs:
+        url: http://geojson.org/geojson-spec.html#id3
+      allOf:
+        - $ref: "#/components/schemas/geometry"
+      properties:
+        type:
+          type: string
+          enum:
+          - LineString
+        coordinates:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/point'
+  
+    polygon:
+      type: object
+      description: GeoJSon geometry
+      externalDocs:
+        url: http://geojson.org/geojson-spec.html#id4
+      allOf:
+        - $ref: "#/components/schemas/geometry"
+      properties:
+        type:
+          type: string
+          enum:
+          - Polygon
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/point'
+  
+    multiPoint:
+      type: object
+      description: GeoJSon geometry
+      externalDocs:
+        url: http://geojson.org/geojson-spec.html#id5
+      allOf:
+        - $ref: "#/components/schemas/geometry"
+      properties:
+        type:
+          type: string
+          enum:
+          - MultiPoint
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/point'
+  
+    multilineString:
+      type: object
+      description: GeoJSon geometry
+      externalDocs:
+        url: http://geojson.org/geojson-spec.html#id6
+      allOf:
+        - $ref: "#/components/schemas/geometry"
+      properties:
+        type:
+          type: string
+          enum:
+          - MultilineString
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/point'
+  
+    multiPolygon:
+      type: object
+      description: GeoJSon geometry
+      externalDocs:
+        url: http://geojson.org/geojson-spec.html#id6
+      allOf:
+        - $ref: "#/components/schemas/geometry"
+      properties:
+        type:
+          type: string
+          enum:
+          - Multipolygon
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/point'
+  
+  parameters:
+    apiVersion:
+      in: header
+      name: Api-Version
+      required: true
+      schema:
+        type: string
+      description: Version of the API.
+      example: 0.1
