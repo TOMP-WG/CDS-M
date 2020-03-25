@@ -1,0 +1,410 @@
+{
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "Dataset",
+				"name": "EBO BV 2020-03-09",
+				"description": "Example bike operator BV, data of 9th March 2020"
+			}
+		},
+		{
+			"type": "Feature",
+			"id": 1,
+			"geometry": [
+				{
+					"type": "Polygon",
+					"coordinates": [
+						[
+							{
+								"type": "Point",
+								"coordinates": [
+									4.72924173,
+									52.27817413
+								]
+							},
+							{
+								"type": "Point",
+								"coordinates": [
+									5.07916213,
+									52.27817413
+								]
+							},
+							{
+								"type": "Point",
+								"coordinates": [
+									5.07916213,
+									52.43106373
+								]
+							},
+							{
+								"type": "Point",
+								"coordinates": [
+									4.72924173,
+									52.43106373
+								]
+							},
+							{
+								"type": "Point",
+								"coordinates": [
+									4.72924173,
+									52.27817413
+								]
+							}
+						]
+					]
+				}
+			]
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "Dimension",
+				"name": "city",
+				"description": "string",
+				"dimensionElements": [
+					"Amsterdam",
+					"Eindhoven"
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "Dimension",
+				"name": "origin",
+				"description": "all id's of the area's. This is an array referencing all features with a geometry",
+				"dimensionElements": [
+					1
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "Dimension",
+				"name": "destination",
+				"description": "all id's of the area's. This is an array referencing all features with a geometry",
+				"dimensionElements": [
+					1
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "Dimension",
+				"name": "year",
+				"description": "all the (upcoming) years",
+				"dimensionElements": [
+					2020,
+					2021,
+					2022,
+					2023,
+					2024,
+					2025,
+					2026,
+					2027
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "Dimension",
+				"name": "month",
+				"description": "all months",
+				"dimensionElements": [
+					1,
+					2,
+					3,
+					4,
+					5,
+					6,
+					7,
+					8,
+					9,
+					10,
+					11,
+					12
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "Dimension",
+				"name": "day",
+				"description": "all days of the month",
+				"dimensionElements": [
+					1,
+					2,
+					3,
+					4,
+					5,
+					6,
+					7,
+					8,
+					9,
+					10,
+					11,
+					12,
+					13,
+					14,
+					15,
+					16,
+					17,
+					18,
+					19,
+					20,
+					21,
+					22,
+					23,
+					24,
+					25,
+					26,
+					27,
+					28,
+					29,
+					30,
+					31
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "Dimension",
+				"name": "hour",
+				"description": "all hours of the day",
+				"dimensionElements": [
+					0,
+					1,
+					2,
+					3,
+					4,
+					5,
+					6,
+					7,
+					8,
+					9,
+					10,
+					11,
+					12,
+					13,
+					14,
+					15,
+					16,
+					17,
+					18,
+					19,
+					20,
+					21,
+					22,
+					23
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "Dimension",
+				"name": "week",
+				"description": "all weeks of the year",
+				"dimensionElements": [
+					1,
+					2,
+					3,
+					4,
+					5,
+					6,
+					7,
+					8,
+					9,
+					10,
+					11,
+					12,
+					13,
+					14,
+					15,
+					16,
+					17,
+					18,
+					19,
+					20,
+					21,
+					22,
+					23,
+					24,
+					25,
+					26,
+					27,
+					28,
+					29,
+					30,
+					31,
+					32,
+					33,
+					34,
+					35,
+					36,
+					37,
+					38,
+					39,
+					40,
+					41,
+					42,
+					43,
+					44,
+					45,
+					46,
+					47,
+					48,
+					49,
+					50,
+					51,
+					52,
+					53
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "Dimension",
+				"name": "day_of_week",
+				"description": "all day of weeks, 0=Sunday",
+				"dimensionElements": [
+					0,
+					1,
+					2,
+					3,
+					4,
+					5,
+					6
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"measumements": [
+					"total_movements",
+					"unique_users",
+					"total_km",
+					"total_duration_minutes",
+					"total_co2",
+					"total_pm10",
+					"total_nox",
+					"total_number_of_stops",
+					"total_non_moving_assets",
+					"total_parking_time",
+					"total_charging_minutes",
+					"total_out_of_geofence"
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "TabularDatasetRow",
+				"tabularDatasetId": 1,
+				"city": "Amsterdam",
+				"origin": 1,
+				"destination": 1,
+				"mode": "bike",
+				"year": 2020,
+				"month": 3,
+				"day": 12,
+				"hour": 8,
+				"day_of_week": 1,
+				"week": 11,
+				"total_movements": 18,
+				"unique_users": 16,
+				"total_km": 68,
+				"total_duration_minutes": 324,
+				"total_co2": 392,
+				"total_pm10": 0,
+				"total_nox": 0,
+				"total_number_of_stops": 58,
+				"total_non_moving_assets": 3,
+				"total_parking_time": 38,
+				"total_charging_minutes": 44,
+				"total_out_of_geofence": 3
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "TabularDatasetRow",
+				"tabularDatasetId": 1,
+				"city": "Amsterdam",
+				"origin": 1,
+				"destination": 1,
+				"mode": "bike",
+				"year": 2020,
+				"month": 3,
+				"day": 12,
+				"hour": 9,
+				"day_of_week": 1,
+				"week": 11,
+				"total_movements": 22,
+				"unique_users": 18,
+				"total_km": 68,
+				"total_duration_minutes": 324,
+				"total_co2": 392,
+				"total_pm10": 0,
+				"total_nox": 0,
+				"total_number_of_stops": 58,
+				"total_non_moving_assets": 3,
+				"total_parking_time": 38,
+				"total_charging_minutes": 44,
+				"total_out_of_geofence": 3
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": null,
+			"properties": {
+				"type": "TabularDatasetRow",
+				"tabularDatasetId": 1,
+				"city": "Amsterdam",
+				"origin": 1,
+				"destination": 1,
+				"mode": "bike",
+				"year": 2020,
+				"month": 3,
+				"day": 12,
+				"hour": 10,
+				"day_of_week": 1,
+				"week": 11,
+				"total_movements": 11,
+				"unique_users": 8,
+				"total_km": 68,
+				"total_duration_minutes": 324,
+				"total_co2": 392,
+				"total_pm10": 0,
+				"total_nox": 0,
+				"total_number_of_stops": 58,
+				"total_non_moving_assets": 3,
+				"total_parking_time": 38,
+				"total_charging_minutes": 44,
+				"total_out_of_geofence": 3
+			}
+		}
+	]
+}
