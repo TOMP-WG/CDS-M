@@ -5,10 +5,10 @@ City Data Specification
 We have to transmit a lot of information from transport operators (TO) to cities. Therefore we created this API. The TO can request the meta data from the city endpoint, so it can create a file with the requested data.
 
 ## Meta data
-The meta data exists out of 3 parts: 1) the area's and 2) the dimensions 3) the measurements.
+The meta data exists out of 3 parts: 1) the areas and 2) the dimensions 3) the measurements.
 
 ### Areas
-the Area's are normal geojson features, containing (multi)polygons. For future usage we added also points (eHubs) and lines (links).
+the Areas are normal geojson features, containing (multi)polygons. For future usage we added also points (eHubs) and lines (links).
 
 ### Dimensions
 The dimensions are the where the measurements are aggregated on. These should be in fixed domains, so they are clearly specified. An example (the city dimension):
@@ -85,7 +85,7 @@ And finally the actual data, containing all dimensions and aggregated values per
 		}
 </pre>
 
-To communicate data about 1 specific area (f.i. total parking time), the destination should be -1.
+To communicate data about 1 specific area (e.g., total parking time), the destination should be -1.
 <pre>
 {
 			"type": "Feature",
