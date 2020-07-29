@@ -1,5 +1,5 @@
-# TOMP-CDS
-City Data Standard
+# TOMP-CDS-M
+City Data Standard - Mobility
 
 ## General idea
 We have to transmit a lot of information from transport operators (TO) to cities. Therefore we created this API. The TO can request the meta data from the city endpoint, so it can create a file with the requested data.
