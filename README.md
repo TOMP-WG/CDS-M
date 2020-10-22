@@ -1,4 +1,4 @@
-# TOMP-CDS-M
+# CDS-M
 City Data Standard - Mobility
 
 ## General idea
